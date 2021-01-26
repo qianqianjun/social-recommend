@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>注册页面</title>
+<!-- Meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="login/css/style.css" type="text/css" media="all" />
+<link href="login/css/font-awesome.css" rel="stylesheet">
+<!--	<script>-->
+<!--		function subForm() {-->
+<!--			var pass1=document.getElementById("password1");-->
+<!--			var pass2=document.getElementById("password2");-->
+<!--			if(pass1===pass2){-->
+<!--				document.getElementsByTagName("form")[0].submit();-->
+<!--			}else{-->
+<!--				alert("两次输入的密码不一致");-->
+<!--			}-->
+<!--		}-->
+<!--	</script>-->
+</head>
+<body>
+<section class="w3l-form-36">
+	<div class="form-36-mian section-gap">
+		<div class="wrapper">
+			<div class="form-inner-cont">
+				<h3>创建你的账号</h3>
+				<form action="/user/adduser" method="post" class="signin-form">
+					<div class="form-input">
+						<span class="fa fa-id-card-o" aria-hidden="true"></span>
+						<input type="text" name="account" placeholder="输入账号" required />
+					</div>
+					<div class="form-input">
+						<span class="fa fa-user-o" aria-hidden="true"></span>
+						<input type="text" name="nickname" placeholder="输入昵称" required />
+					</div>
+					<div class="form-input">
+						<span class="fa fa-yelp" aria-hidden="true"></span>
+						<select name="gender" >
+							<option value="男">男</option>
+							<option value="女">女</option>
+						</select>
+					</div>
+					<div class="form-input">
+						<span class="fa fa-user-circle" aria-hidden="true"></span>
+						<input type="text" name="age" placeholder="年龄" required />
+					</div>
+					<div class="form-input">
+						<span class="fa fa-envelope-o" aria-hidden="true"></span>
+						<input type="email" name="email" placeholder="输入邮箱" required />
+					</div>
+					<div class="form-input">
+						<span class="fa fa-address-book-o" aria-hidden="true"></span>
+						<input type="text" name="address" placeholder="输入地址" required />
+					</div>
+					<div class="form-input">
+						<span class="fa fa-key" aria-hidden="true"></span>
+						<input type="password" name="password" placeholder="输入您的密码" id="password1" required />
+					</div>
+<!--					<div class="form-input">-->
+<!--						<span class="fa fa-key" aria-hidden="true"></span>-->
+<!--						<input type="password" name="password" placeholder="确认您的面膜" id="password2" required />-->
+<!--					</div>-->
+					<div class="login-remember d-grid">
+						<button class="btn theme-button" style="width: 336px;" onclick="subForm()">注册账号</button>
+					</div>
+				</form>
+				<p style="color: red;" th:if="${msg} != null"><span>[[ ${msg} ]]</span></p>
+				<p class="signup">已经有账号了? <a href="/" class="signuplink">直接登录</a></p>
+			</div>
+			<div class="copy-right">
+				<p>Copyright &copy; 2020.XJTU qianqianjun All rights reserved.</p>
+			</div>
+		</div>
+	</div>
+</section>
+</body>
+</html>

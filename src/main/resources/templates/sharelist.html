@@ -1,0 +1,36 @@
+﻿<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml" class="translated-ltr">
+<head th:replace="cssloader::cssloader(${title})"></head>
+<body>
+<!-- header -->
+<header th:replace="component/header::header(${user})"></header>
+<!-- end header -->
+	<!-- main content -->
+	<main class="main main--breadcrumb">
+		<!-- breadcrumb -->
+		<div class="breadcrumb">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<ul class="breadcrumb__wrap">
+							<li class="breadcrumb__item"><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${index}]]</font></font></a></li>
+							<li class="breadcrumb__item breadcrumb__item--active"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${title}]]</font></font></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end breadcrumb -->
+		<div class="container">
+			<div class="row">
+				<div th:replace="component/userinfo::userinfo(${user})"></div>
+				<div class="col-12 col-md-7 col-lg-8 col-xl-6">
+					<!-- post -->
+					<div th:replace="component/shareItem::shareitem(${shares})"></div>
+					<!-- end post -->
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+<div th:replace="jsloader::jsloader"></div>
+</html>

@@ -1,0 +1,52 @@
+<!-- profile -->
+<div th:fragment="unfollowitem(recommends)" class="col-12 col-sm-6 col-md-12 col-lg-4" th:each="item:${recommends}" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="profile">
+        <div class="profile__logo">
+            <img th:src="${item.imgurl}" alt="用户头像">
+        </div>
+        <div class="profile__wrap">
+            <h2 class="profile__title"><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.nickname}]]</font></font></a></h2>
+            <p class="profile__text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.account}]]</font></font></p>
+        </div>
+        <div class="profile__actions">
+            <div class="post__location">
+                <i class="icon ion-ios-navigate"></i>
+                <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.address}]]</font></font></span>
+            </div>
+            <div class="post__actions">
+                <button class="post__actions-btn post__actions-btn--blue" th:onclick="@{'followit(this.id)'}" th:id="@{'btn-'+${item.account}}">
+											<span>
+												<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">关注</font></font>
+											</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end profile -->
+
+<div th:fragment="followitem(recommends)" class="col-12 col-sm-6 col-md-12 col-lg-4" th:each="item:${recommends}" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="profile">
+        <div class="profile__logo">
+            <img th:src="${item.imgurl}" alt="用户头像">
+        </div>
+        <div class="profile__wrap">
+            <h2 class="profile__title"><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.nickname}]]</font></font></a></h2>
+            <p class="profile__text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.account}]]</font></font></p>
+        </div>
+        <div class="profile__actions">
+            <div class="post__location">
+                <i class="icon ion-ios-navigate"></i>
+                <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.address}]]</font></font></span>
+            </div>
+            <div class="post__actions">
+                <button class="post__actions-btn post__actions-btn--blue" th:onclick="@{'unfollowit(this.id)'}" th:id="@{'btn-'+${item.account}}">
+											<span>
+												<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">取关</font></font>
+											</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end profile -->

@@ -1,0 +1,96 @@
+<div th:fragment="shareitem(shares)" xmlns:th="http://www.w3.org/1999/xhtml">
+<script type="text/javascript" th:inline="javascript">
+    function praiseit(shareid) {
+        var formData=new FormData();
+        formData.append("account",[[${user.account}]])
+        formData.append("shareid",shareid);
+        var xhr=new XMLHttpRequest();
+        xhr.open("POST","/praised/zan");
+        xhr.onload=function (ev) {
+            if(xhr.status===200){
+                var btn=document.getElementById("btn-"+shareid);
+                var icon=document.getElementById("icon-"+shareid);
+                var number=document.getElementById("share-"+shareid);
+                btn.setAttribute("onclick","unpraiseit("+shareid+")");
+                icon.setAttribute("style","color:red;");
+                number.innerHTML=JSON.parse(xhr.response).data;
+            }else{
+                alert("操作失败，请联系管理员!");
+            }
+        };
+        xhr.send(formData);
+    }
+
+    function unpraiseit(shareid) {
+        var formData=new FormData();
+        formData.append("account",[[${user.account}]]);
+        formData.append("shareid",shareid)
+        var xhr=new XMLHttpRequest();
+        xhr.open("POST","/praised/unzan");
+        xhr.onload=function (ev) {
+            if(xhr.status===200){
+                var btn=document.getElementById("btn-"+shareid);
+                var icon=document.getElementById("icon-"+shareid);
+                var number=document.getElementById("share-"+shareid);
+                btn.setAttribute("onclick","praiseit("+shareid+")");
+                icon.setAttribute("style","");
+                number.innerHTML=JSON.parse(xhr.response).data;
+            }else{
+                alert("操作失败，请联系管理员!");
+            }
+        };
+        xhr.send(formData);
+    }
+</script>
+
+<div class="post" th:each="item:${shares}">
+    <div class="post__head">
+        <a href="#" class="post__head-img">
+            <img th:src="${item.publisherimg}" alt="">
+        </a>
+        <div class="post__head-title">
+            <h5><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.publisher}]]</font></font></a></h5>
+            <p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.time}]]</font></font></p>
+        </div>
+<!--        <div class="post__dropdown">-->
+<!--            <a class="dropdown-toggle post__dropdown-btn" href="#" role="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                <i class="icon ion-md-more"></i>-->
+<!--            </a>-->
+<!--            <ul class="dropdown-menu dropdown-menu-right post__dropdown-menu" aria-labelledby="dropdownMenu1">-->
+<!--                <li><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">取消关注</font></font></a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
+    </div>
+
+    <div class="post__wrap">
+        <div class="post__location">
+            <i class="icon ion-ios-navigate"></i>
+            <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.address}]]</font></font></span>
+        </div>
+    </div>
+
+    <h2 class="post__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.title}]]</font></font></h2>
+
+    <div class="post__description">
+        <p>[[${item.content}]]</p>
+    </div>
+
+    <div class="post__tags">
+        <img th:if="${item.imgurl}!=null" th:src="${item.imgurl}" alt="" style="max-width: 100%">
+    </div>
+
+    <div class="post__stats">
+        <div>
+            <a class="post__likes" th:onclick="@{'praiseit('+${item.id}+')'}" th:id="@{'btn-'+${item.id}}">
+                <i class="icon ion-ios-heart" th:id="@{'icon-'+${item.id}}"></i>
+                <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;" th:id="@{'share-'+${item.id}}"></font></font></span>
+            </a>
+        </div>
+        <div class="post__views">
+            <i class="icon ion-ios-eye"></i>
+            <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.relatedHobby}]]</font></font></span>
+        </div>
+    </div>
+</div>
+
+</div>

@@ -1,0 +1,87 @@
+﻿<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml" class="translated-ltr">
+<head th:replace="cssloader::cssloader('社交推荐系统')"></head>
+<body>
+<!-- header -->
+<header th:replace="component/header::header(${user})"></header>
+<!-- end header -->
+
+	<!-- main content -->
+	<main class="main">
+		<div class="container">
+			<div class="row">
+				<div th:replace="component/userinfo::userinfo(${user})"></div>
+
+				<div class="col-12 col-md-7 col-lg-8 col-xl-6">
+					<ul class="nav nav-tabs main__nav" id="main__nav" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" ><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">好友动态</font></font></a>
+						</li>
+					</ul>
+					<!-- post -->
+					<div th:replace="component/shareItem::shareitem(${shares})"></div>
+					<!-- end post -->
+				</div>
+
+				<div class="col-12 col-md-5 col-lg-4 col-xl-3">
+					<!-- sidebox -->
+					<div class="sidebox sidebox--desk">
+						<h4 class="sidebox__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可能认识</font></font></h4>
+						<div class="sidebox__content" th:if="${byfriend.size}>0">
+							<div class="sidebox__user" th:each="item:${byfriend}">
+								<a href="#" class="sidebox__user-img">
+									<img th:src="${item.imgurl}" alt="">
+								</a>
+								<div class="sidebox__user-title">
+									<h5><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.nickname}]]</font></font></a></h5>
+									<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.account}]]</font></font></p>
+								</div>
+							</div>
+						</div>
+						<a href="/recommend/user/byfriend" class="sidebox__more"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">查看更多</font></font></a>
+					</div>
+					<!-- end sidebox -->
+
+					<!-- sidebox -->
+					<div class="sidebox sidebox--desk">
+						<h4 class="sidebox__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">最常互动</font></font></h4>
+						<div class="sidebox__content">
+							<div class="sidebox__content" th:if="${byshare.size}>0">
+								<div class="sidebox__user" th:each="item:${byshare}">
+									<a href="#" class="sidebox__user-img">
+										<img th:src="${item.imgurl}" alt="">
+									</a>
+									<div class="sidebox__user-title">
+										<h5><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.nickname}]]</font></font></a></h5>
+										<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.account}]]</font></font></p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<a href="/recommend/user/byshare" class="sidebox__more"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">查看更多</font></font></a>
+					</div>
+					<!-- end sidebox -->
+
+					<!-- sidebox -->
+					<div class="sidebox sidebox--desk">
+						<h4 class="sidebox__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">相同兴趣</font></font></h4>
+						<div class="sidebox__content" th:if="${byhobby.size}>0">
+							<div class="sidebox__user" th:each="item:${byhobby}">
+								<a href="#" class="sidebox__user-img">
+									<img th:src="${item.imgurl}" alt="">
+								</a>
+								<div class="sidebox__user-title">
+									<h5><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.nickname}]]</font></font></a></h5>
+									<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${item.account}]]</font></font></p>
+								</div>
+							</div>
+						</div>
+						<a href="/recommend/user/byhobby" class="sidebox__more"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">查看更多</font></font></a>
+					</div>
+					<!-- end sidebox -->
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+<div th:replace="jsloader::jsloader"></div>
+</html>

@@ -1,0 +1,136 @@
+﻿<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml" class="translated-ltr">
+<head th:replace="cssloader::cssloader('兴趣部落')"></head>
+<body>
+<!-- header -->
+<header th:replace="component/header::header(${user})"></header>
+<!-- end header -->
+
+	<!-- main content -->
+	<main class="main main--breadcrumb">
+		<!-- breadcrumb -->
+		<div class="breadcrumb">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<ul class="breadcrumb__wrap">
+							<li class="breadcrumb__item"><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">首页</font></font></a></li>
+							<li class="breadcrumb__item breadcrumb__item--active"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">兴趣部落</font></font></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end breadcrumb -->
+		<div class="container">
+			<div class="row">
+				<div th:replace="component/userinfo::userinfo(${user})"></div>
+				<div class="col-12 col-md-7 col-lg-8 col-xl-6">
+					<script type="text/javascript" th:inline="javascript">
+						function likeit(hobbyid) {
+							var formData=new FormData();
+							formData.append("account",[[${user.account}]])
+							formData.append("hobbyid",hobbyid);
+							var xhr=new XMLHttpRequest();
+							xhr.open("POST","/user/like");
+							xhr.onload=function (ev) {
+								if(xhr.status===200){
+									alert("关注成功！");
+									var btn=document.getElementById("btn-"+hobbyid);
+									btn.setAttribute("class","post__actions-btn post__actions-btn--red");
+									btn.setAttribute("onclick","unlikeit("+hobbyid+")");
+								}else{
+									alert("操作失败，请联系管理员!");
+								}
+							};
+							xhr.send(formData);
+						}
+
+						function unlikeit(hobbyid) {
+							var formData=new FormData();
+							formData.append("account",[[${user.account}]]);
+							formData.append("hobbyid",hobbyid)
+							var xhr=new XMLHttpRequest();
+							xhr.open("POST","/user/unlike");
+							xhr.onload=function (ev) {
+								if(xhr.status===200){
+									alert("已取消关注");
+									var btn=document.getElementById("btn-"+hobbyid);
+									btn.setAttribute("class","post__actions-btn post__actions-btn--green");
+									btn.setAttribute("onclick","likeit("+hobbyid+")");
+								}else{
+									alert("操作失败，请联系管理员!");
+								}
+							};
+							xhr.send(formData);
+						}
+					</script>
+					<div class="row">
+						<!-- company -->
+						<div th:replace="component/hobbyitem::hobbyitem(${hobbies})"></div>
+						<div th:replace="component/hobbyitem::myhobbies(${myhobbies})"></div>
+						<!-- end company -->
+					</div>
+				</div>
+
+				<div class="col-12 col-md-5 col-lg-4 col-xl-3">
+					<div class="tab-content">
+						<div class="tab-pane fade active show" role="tabpanel" aria-labelledby="tab-3">
+							<!-- form -->
+							<form class="form">
+								<div class="row">
+									<div class="col-12">
+										<h2 class="form__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">创建兴趣</font></font></h2>
+									</div>
+									<div class="col-12 col-lg-12">
+										<div class="form__group">
+											<label for="hname" class="form__label"><font style="vertical-align: inherit;">
+												<font style="vertical-align: inherit;">兴趣名称</font></font></label>
+											<input name="hname" id="hname" type="text" class="form__input">
+										</div>
+									</div>
+									<div class="col-12 col-lg-12">
+										<div class="form__group">
+											<label for="htype" class="form__label"><font style="vertical-align: inherit;">
+												<font style="vertical-align: inherit;">兴趣类型</font></font></label>
+											<input name="htype" id="htype" type="text" class="form__input">
+										</div>
+									</div>
+									<div class="col-12">
+										<button class="form__btn" type="button" onclick="addhobby()">
+											<span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">添加兴趣</font></font></span>
+										</button>
+									</div>
+								</div>
+							</form>
+							<script>
+								function addhobby() {
+									var hname=document.getElementById("hname").value;
+									var htype=document.getElementById("htype").value;
+									if(hname=='' || htype==''){
+										alert("请您输入完整的信息");
+									}else{
+										var formData=new FormData();
+										formData.append("htype",htype);
+										formData.append("hname",hname);
+										var xhr=new XMLHttpRequest();
+										xhr.open("POST","/hobby/addhobby");
+										xhr.onload=function (ev) {
+											if(xhr.status===200){
+												alert("添加成功");
+											}else{
+												alert("操作失败，请联系管理员!");
+											}
+										};
+										xhr.send(formData);
+									}
+								}
+							</script>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+<div th:replace="jsloader::jsloader"></div>
+</html>

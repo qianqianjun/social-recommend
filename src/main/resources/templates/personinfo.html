@@ -1,0 +1,256 @@
+﻿<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml" class="translated-ltr"
+	  xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head th:replace="cssloader::cssloader('个人信息')"></head>
+<body>
+<!-- header -->
+<script type="text/javascript" src="/js/axios.min.js"></script>
+<script type="text/javascript" src="/js/vue.min.js"></script>
+<script type="text/javascript" src="/js/vue-resource.min.js"></script>
+<header th:replace="component/header::header(${user})"></header>
+<!-- end header -->
+
+	<!-- main content -->
+	<main class="main main--breadcrumb">
+		<!-- breadcrumb -->
+		<div class="breadcrumb">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<ul class="breadcrumb__wrap">
+							<li class="breadcrumb__item"><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">首页</font></font></a></li>
+							<li class="breadcrumb__item breadcrumb__item--active"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">个人信息</font></font></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end breadcrumb -->
+		<div class="container">
+			<div class="row" id="app">
+				<div th:replace="component/userinfo::userinfo(${user})"></div>
+
+				<div class="col-12 col-md-7 col-lg-8 col-xl-6">
+					<div class="tab-content">
+						<div class="tab-pane fade active show" id="tab-3" role="tabpanel" aria-labelledby="tab-3">
+							<!-- form -->
+							<form class="form">
+								<div class="row">
+									<div class="col-12">
+										<h2 class="form__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">个人资料修改</font></font></h2>
+									</div>
+
+									<div class="col-12 col-lg-6">
+										<div class="form__group">
+											<label for="nickname" class="form__label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">昵称：</font></font></label>
+											<input name="nickname" id="nickname" type="text" class="form__input" placeholder="输入昵称" v-model="nickname">
+										</div>
+									</div>
+
+									<div class="col-12 col-lg-6">
+										<div class="form__group">
+											<label for="email" class="form__label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">电子邮件：</font></font></label>
+											<input name="email" id="email" type="text" class="form__input" placeholder="email@email.com" v-model="email">
+										</div>
+									</div>
+
+									<div class="col-12 col-lg-6">
+										<div class="form__group">
+											<label for="address" class="form__label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">地址：</font></font></label>
+											<input name="address" id="address" type="text" class="form__input" placeholder="输入地址" v-model="address">
+										</div>
+									</div>
+
+									<div class="col-12 col-lg-6">
+										<div class="form__group">
+											<label for="age" class="form__label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">年龄：</font></font></label>
+											<input name="age" id="age" type="text" class="form__input" placeholder="输入年龄" v-model="age">
+										</div>
+									</div>
+
+									<div class="col-12">
+										<button class="form__btn" type="button" v-on:click="fixinfo">
+											<span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">保存更改</font></font></span>
+										</button>
+									</div>
+								</div>
+							</form>
+							<!-- end form -->
+
+							<!-- form -->
+							<form class="form">
+								<div class="row">
+									<div class="col-12">
+										<h2 class="form__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">更改密码</font></font></h2>
+									</div>
+
+									<div class="col-12 col-lg-6">
+										<div class="form__group">
+											<label for="newpass" class="form__label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">新密码：</font></font></label>
+											<input name="newpass" id="newpass" type="password" class="form__input" v-model="newpass">
+										</div>
+									</div>
+
+									<div class="col-12 col-lg-6">
+										<div class="form__group">
+											<label for="confirmpass" class="form__label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">确认新密码：</font></font></label>
+											<input name="confirmpass" id="confirmpass" type="password" class="form__input" v-model="confirmpass">
+										</div>
+									</div>
+
+									<div class="col-12">
+										<button class="form__btn" type="button" v-on:click="fixpass">
+											<span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">更改密码</font></font></span>
+										</button>
+									</div>
+								</div>
+							</form>
+							<!-- end form -->
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-5 col-lg-4 col-xl-3">
+					<div class="tab-content">
+						<div class="tab-pane fade active show" role="tabpanel" aria-labelledby="tab-3">
+							<!-- form -->
+							<form class="form">
+								<div class="row">
+									<div class="col-12">
+										<h2 class="form__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">头像修改</font></font></h2>
+									</div>
+
+									<div class="col-12 col-lg-12">
+										<div class="form__group">
+											<label for="filepath" class="form__label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">上传图片</font></font></label>
+											<input name="file" id="filepath" type="file" class="form__input" accept="images/*">
+										</div>
+									</div>
+									<div class="col-12">
+										<img v-if="imgurl!=null" alt="这里是描述图片" id="upload_img" v-bind:src="imgurl" style="max-width: 100%;margin-bottom: 10px;">
+									</div>
+									<div class="col-12">
+										<button class="form__btn" type="button" v-on:click="uploadImg">
+											<span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">上传图片</font></font></span>
+										</button>
+									</div>
+									<div class="col-12">
+										<button class="form__btn" type="button" v-on:click="fiximg">
+											<span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">更改头像</font></font></span>
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript" th:inline="javascript">
+				new Vue({
+					el: '#app',
+					data: {
+						account: [[${user.account}]],
+
+						newpass:'',
+						confirmpass:'',
+
+						nickname:[[${user.nickname}]],
+						age:[[${user.age}]],
+						address:[[${user.address}]],
+						email:[[${user.email}]],
+
+						imgurl:[[${user.imgurl}]],
+					},
+					methods:{
+						uploadImg:function(event){
+							var param=new FormData();
+							var fileInput=document.getElementById("filepath");
+							var filepath=fileInput.files[0];
+							if(filepath==null)
+								alert("请您先选择图片");
+							else {
+								param.append("file", filepath);
+								this.$http.post('/upload', param, {emulateJSON: true}).then(function (res) {
+									if (res.status === 200) {
+										alert("上传成功");
+										this.imgurl = "/upload/" + res.data.data;
+										document.getElementById("upload_img").setAttribute("src", this.imgurl);
+									} else {
+										alert("操作失败");
+										alert(res.status);
+									}
+								}, function (res) {
+									console.log(res.status);
+								});
+							}
+						},
+						fixpass:function () {
+							if(this.newpass=='' || this.confirmpass=='')
+								alert("请您完整填写信息");
+							else {
+								this.$http.post('/user/fixpass', {
+									account:this.account,
+									confirmpass: this.data.confirmpass,
+									newpass: this.newpass
+								}, {emulateJSON: true}).then(function (res) {
+									if (res.status === 200) {
+										alert("密码修改成功！");
+									} else {
+										alert("操作失败");
+										alert(res.status);
+									}
+								}, function (res) {
+									console.log(res.status);
+								});
+							}
+						},
+						fixinfo:function () {
+							if(this.nickname=='' || this.age=='' || this.address=='' || this.email=='')
+								alert("请您填写完整的信息");
+							else {
+								this.$http.post('/user/fixinfo', {
+									account:this.account,
+									nickname: this.nickname,
+									age: this.age,
+									address: this.address,
+									email: this.email,
+								}, {emulateJSON: true}).then(function (res) {
+									if (res.status === 200) {
+										alert("修改成功，请重新登录系统更新状态！");
+									} else {
+										alert("操作失败");
+										alert(res.status);
+									}
+								}, function (res) {
+									console.log(res.status);
+								});
+							}
+						},
+						fiximg:function () {
+							console.log(this.imgurl);
+							if(this.imgurl=='' || this.imgurl==null)
+								alert("请您先上传图片");
+							else{
+								this.$http.post('/user/fiximg', {
+									account:this.account,
+									imgurl:this.imgurl
+								}, {emulateJSON:true}).then(function(res){
+									if(res.status===200){
+										alert("头像更改成功，请重新登录系统更新状态！");
+									}else{
+										alert(res.status);
+									}
+								},function(res){
+									console.log(res.status);
+								});
+							}
+						}
+
+					}
+				})
+			</script>
+		</div>
+	</main>
+
+</body>
+<div th:replace="jsloader::jsloader"></div>
+</html>

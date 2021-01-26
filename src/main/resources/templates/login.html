@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>登录页面</title>
+<!-- Meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="/login/css/style.css" type="text/css" media="all" /><!-- Style-CSS -->
+<link href="/login/css/font-awesome.css" rel="stylesheet"><!-- font-awesome-icons -->
+</head>
+
+<body>
+<section class="w3l-form-36">
+	<div class="form-36-mian section-gap">
+		<div class="wrapper">
+			<div class="form-inner-cont">
+				<h3>登录系统</h3>
+				<form action="/login" method="post" class="signin-form">
+					<div class="form-input">
+						<span class="fa fa-user-o" aria-hidden="true"></span> <input type="text" name="account" placeholder="请输入您的账号" required />
+					</div>
+					<div class="form-input">
+						<span class="fa fa-key" aria-hidden="true"></span><input type="password" name="password" placeholder="请输入您的密码"
+							required />
+					</div>
+					<div class="login-remember d-grid">
+						<button class="btn theme-button" style="width: 336px;">登录</button>
+					</div>
+				</form>
+				<p style="color: red;" th:if="${msg} != null"><span>[[ ${msg} ]]</span></p>
+				<div>
+					<p class="signup">还没有账号? <a href="/register" class="signuplink">点击注册</a></p>
+				</div>
+			</div>
+			<div class="copy-right">
+				<p>Copyright &copy; 2020.XJTU qianqianjun All rights reserved.</p>
+			</div>
+		</div>
+	</div>
+</section>
+</body>
+</html>

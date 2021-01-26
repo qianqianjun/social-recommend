@@ -1,0 +1,221 @@
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml" class="translated-ltr"
+      xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head th:replace="cssloader::cssloader(${title})"></head>
+
+<body>
+<script type="text/javascript" src="/js/axios.min.js"></script>
+<script type="text/javascript" src="/js/vue.min.js"></script>
+<script type="text/javascript" src="/js/vue-resource.min.js"></script>
+<!-- header -->
+<header th:replace="component/header::header(${user})"></header>
+<!-- end header -->
+<!-- main content -->
+<main class="main main--breadcrumb">
+    <!-- breadcrumb -->
+    <div class="breadcrumb">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="breadcrumb__wrap">
+                        <li class="breadcrumb__item"><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${index}]]</font></font></a></li>
+                        <li class="breadcrumb__item breadcrumb__item--active"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${title}]]</font></font></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end breadcrumb -->
+
+    <div class="container">
+        <div class="row" id="app">
+            <div class="col-12 col-md-5 col-lg-4 col-xl-3">
+                <!-- nav -->
+                <div class="sidebox">
+                    <h4 class="sidebox__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">设置相关兴趣</font></font></h4>
+
+                    <div class="sidebox__search">
+                        <input type="text" class="filter__input" placeholder="搜索相关兴趣" v-model="keyword">
+                        <button type="button" v-on:click="searchHobby">
+                            <i class="icon ion-ios-search"></i>
+                        </button>
+                    </div>
+                    <div class="sidebox__nav">点击设置相关兴趣（话题）</div>
+                    <ul class="post__tags sidebox__nav">
+                        <a v-for="hobby in hobbies" v-on:click="select(hobby.id)" v-bind:class="{'selected':hobby.selected}">
+                            <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{hobby.hname}}</font></font>
+                        </a>
+                    </ul>
+                </div>
+                <!-- end nav -->
+            </div>
+
+            <div class="col-12 col-md-7 col-lg-8 col-xl-9">
+                <form class="form">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="form__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">发布动态</font></font></h2>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form__group">
+                                <label for="title" class="form__label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">动态标题：</font></font></label>
+                                <input name="title" id="title" type="text" class="form__input" placeholder="输入动态标题" v-model="title">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form__group">
+                                <label for="content" class="form__label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">动态内容：</font></font></label>
+                                <textarea name="content" id="content" class="form__textarea" placeholder="动态内容" v-model="content"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-6">
+                            <div class="form__group">
+                                <label for="filepath" class="form__label"><font style="vertical-align: inherit;">
+                                    <font style="vertical-align: inherit;">上传图片：</font></font>
+                                </label>
+                                <input name="filepath" id="filepath" type="file" accept="image/*" class="form__input" placeholder="上传动态配图">
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <div class="form__group">
+                                <button class="form__btn" type="button" v-on:click="uploadImg" style="top: 18px">
+                                    <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">上传图片</font></font></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <img alt="这里是描述图片" id="upload_img" src="/img/upload.jpg" style="max-width: 70%;margin-bottom: 20px;">
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form__group">
+                                <label for="location" class="form__label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">所在位置：</font></font></label>
+                                <input name="location" id="location" type="text" class="form__input" placeholder="输入所在位置" v-model="address">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <button class="form__btn" type="button" v-on:click="publishShare">
+                                <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">发布动态</font></font></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <!-- end form -->
+            </div>
+
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        new Vue({
+            el: '#app',
+            data: {
+                keyword:'',
+                hobbies:[],
+                related_hobby:'',
+                // 右侧
+                title:'',
+                content:'',
+                address:'',
+                imgurl:'',
+                hobbyid:'',
+                account:[[${user.account}]],
+                publisherimg:[[${user.imgurl}]],
+                publisher:[[${user.nickname}]]
+            },
+            methods:{
+                uploadImg:function(event){
+                    var param=new FormData();
+                    var fileInput=document.getElementById("filepath");
+                    var filepath=fileInput.files[0];
+                    if(filepath==null){
+                        alert("请您先选择图片");
+                    }else {
+                        param.append("file", filepath);
+                        this.$http.post('/upload', param, {emulateJSON: true}).then(function (res) {
+                            if (res.status === 200) {
+                                alert("上传成功");
+                                this.imgurl = "/upload/" + res.data.data;
+                                document.getElementById("upload_img").setAttribute("src", this.imgurl);
+                            } else {
+                                alert(res.status);
+                            }
+                        }, function (res) {
+                            console.log(res.status);
+                        });
+                    }
+                },
+                searchHobby:function(event){
+                    this.$http.get('/hobby/search',{params : {hname:this.keyword}}).then(function(res){
+                        if(res.status===200){
+                            console.log(res);
+                            var hobbies=res.data.data;
+                            for(var i=0;i<hobbies.length;i++){
+                                hobbies[i]["selected"]=false;
+                            }
+                            this.hobbies=hobbies;
+                        }
+                    },function(res){
+                        console.log(res.status);
+                    });
+                },
+                select:function(hobbyid){
+                    for(var i=0;i<this.hobbies.length;i++){
+                        if(this.hobbies[i].id===hobbyid){
+                            this.hobbies[i].selected=true;
+                            this.related_hobby=this.hobbies[i].hname;
+                            this.hobbyid=hobbyid;
+                        }else{
+                            this.hobbies[i].selected=false;
+                        }
+                    }
+                },
+                publishShare:function (event) {
+                    console.log(this.hobbyid);
+                    console.log(this.related_hobby);
+                    console.log(this.title);
+                    console.log(this.content);
+                    console.log(this.address);
+                    console.log(this.imgurl);
+                    console.log(this.account);
+                    console.log(this.publisher);
+                    console.log(this.publisherimg);
+
+                    if(this.hobbyid=='' || this.related_hobby=='' || this.title==''||this.content==''||
+                    this.address===''||this.imgurl===''|| this.account===''|| this.publisher=='' || this.publisherimg==''){
+                        alert("请你填写完整的信息");
+                    }else {
+                        this.$http.post('/share/add', {
+                            hobbyid: this.hobbyid,
+                            related_hobby: this.related_hobby,
+
+                            title: this.title,
+                            content: this.content,
+                            address: this.address,
+                            imgurl: this.imgurl,
+
+                            account: this.account,
+                            publisherimg: this.publisherimg,
+                            publisher: this.publisher
+                        }, {emulateJSON:true}).then(function(res){
+                            if(res.status===200){
+                                alert("添加成功");
+                            }else{
+                                alert(res.status);
+                            }
+                        },function(res){
+                            console.log(res.status);
+                        });
+                    }
+                }
+            }
+        })
+    </script>
+</main>
+<!-- end main content -->
+</body>
+<div th:replace="jsloader::jsloader"></div>
+</html>

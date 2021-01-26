@@ -1,0 +1,99 @@
+﻿<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml" class="translated-ltr">
+<head th:replace="cssloader::cssloader(${title})"></head>
+<body>
+<!-- header -->
+<header th:replace="component/header::header(${user})"></header>
+<!-- end header -->
+	<!-- main content -->
+	<main class="main main--breadcrumb">
+		<!-- breadcrumb -->
+		<div class="breadcrumb">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<ul class="breadcrumb__wrap">
+							<li class="breadcrumb__item"><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${index}]]</font></font></a></li>
+							<li class="breadcrumb__item breadcrumb__item--active"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${title}]]</font></font></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end breadcrumb -->
+		<div class="container">
+			<div class="row">
+				<div th:replace="component/userinfo::userinfo(${user})"></div>
+				<div class="col-12 col-md-7 col-lg-8 col-xl-9">
+					<div class="row">
+						<!-- profile -->
+						<div th:replace="component/useritem::followitem(${recommends})"></div>
+						<!-- end profile -->
+
+						<script type="text/javascript" th:inline="javascript">
+							function followit(account) {
+								account=account.split("-")[1];
+								console.log(account);
+								var formData=new FormData();
+								formData.append("follower",[[${user.account}]])
+								formData.append("following",account);
+								var xhr=new XMLHttpRequest();
+								xhr.open("POST","/follow/followit");
+								xhr.onload=function (ev) {
+									if(xhr.status===200){
+										console.log(xhr);
+										var responsetext=JSON.parse(xhr.response);
+										console.log(responsetext);
+										if(responsetext.ok){
+											alert("已成功关注");
+											var btn=document.getElementById("btn-"+account);
+											btn.setAttribute("class","post__actions-btn post__actions-btn--blue");
+											btn.innerHTML='<span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">取关</font></font></span>';
+											btn.setAttribute("onclick","unfollowit(this.id)");
+										}else{
+											alert("操作失败！");
+											console.log("btn-"+account.toString());
+										}
+									}else{
+										alert("操作失败，请联系管理员!");
+									}
+								};
+								xhr.send(formData);
+							}
+
+							function unfollowit(account) {
+								account=account.split("-")[1];
+								console.log(account);
+								var formData=new FormData();
+								formData.append("follower",[[${user.account}]]);
+								formData.append("following",account);
+								console.log(formData);
+								var xhr=new XMLHttpRequest();
+								xhr.open("POST","/follow/unfollow");
+								xhr.onload=function (ev) {
+									if(xhr.status===200){
+										var res=JSON.parse(xhr.response);
+										console.log(res);
+										if(res.ok) {
+											alert("已取消关注");
+											var btn = document.getElementById("btn-" + account);
+											btn.setAttribute("class", "post__actions-btn post__actions-btn--blue");
+											btn.innerHTML = '<span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">关注</font></font></span>';
+											btn.setAttribute("onclick", "followit(this.id)");
+										}else{
+											alert("操作失败");
+										}
+									}else{
+										alert("操作失败，请联系管理员!");
+									}
+								};
+								xhr.send(formData);
+							}
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+<div th:replace="jsloader::jsloader"></div>
+</html>
